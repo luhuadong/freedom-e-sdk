@@ -29,7 +29,6 @@ export def allFreedomESDKExamples sdkTarget =
   def programList =
     makeFreedomESDKProgram "hello" "example",
     makeFreedomESDKProgram "atomics" "example",
-    makeFreedomESDKProgram "cflush" "example",
     makeFreedomESDKProgram "csr-access" "example",
     makeFreedomESDKProgram "empty" "example",
     makeFreedomESDKProgram "buserror" "example",
