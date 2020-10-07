@@ -88,10 +88,13 @@ def filterFreedomESDKPrograms sdkTarget programs =
   def targetHasSPI = targetHasCompatible sdkTarget "sifive,spi0"
   def targetHasPWM = targetHasCompatible sdkTarget "sifive,pwm0"
   def targetHasAON = targetHasCompatible sdkTarget "sifive,aon0"
+  def targetIs2Series = targetHasCompatible sdkTarget "sifive,caboose0"
 
   programs
+  | filter (\p (! matches `.*atomics.*` p.getFreedomESDKProgramName) || (! targetIs2Series))
   | filter (\p (! matches `.*buserror.*` p.getFreedomESDKProgramName) || targetHasBusError)
   | filter (\p (! matches `.*clic.*` p.getFreedomESDKProgramName) || targetHasClic)
+  | filter (\p (! matches `.*multicore-hello.*` p.getFreedomESDKProgramName) || (! targetIs2Series))
   | filter (\p (! matches `.*spi.*` p.getFreedomESDKProgramName) || targetHasSPI)
   | filter (\p (! matches `.*pwm.*` p.getFreedomESDKProgramName) || targetHasPWM)
   | filter (\p (! matches `.*rtc.*` p.getFreedomESDKProgramName) || targetHasAON)
