@@ -123,6 +123,7 @@ def filterFreedomESDKPrograms sdkTarget programs =
   | filter (\p (! matches `.*pwm.*` p.getFreedomESDKProgramName) || targetHasPWM)
   | filter (\p (! matches `.*rtc.*` p.getFreedomESDKProgramName) || targetHasAON)
   | filter (\p (! matches `.*user.*` p.getFreedomESDKProgramName) || (! targetIs2Series))
+  | filter (\p (! matches `.*user.*` p.getFreedomESDKProgramName) || targetHasPMP)
   | filter (\p (! matches `.*(watchdog|wdog).*` p.getFreedomESDKProgramName) || targetHasAON)
   | filter (\p (! freedomESDKProgramOverflowsMemory sdkTarget p))
   | filter (\p (! freedomESDKProgramCannotLinkUnderCodeModel sdkTarget p))
