@@ -90,15 +90,15 @@ def filterFreedomESDKPrograms sdkTarget programs =
   def targetHasAON = targetHasCompatible sdkTarget "sifive,aon0"
   def targetIs2Series = targetHasCompatible sdkTarget "sifive,caboose0"
 
+  def coreDTSContents =
+    def coreDTS =
+      sdkTarget.getFreedomESDKTargetInstalledFiles
+      | filter (\p (! matches `.*core\.dts` p.getPathName))
+      | head
+    match coreDTS
+      Some f = read f
+      None = Fail "No core.dts in FreedomESDKTarget".makeError
   def targetHasPMP =
-    def coreDTSContents =
-      def coreDTS =
-        sdkTarget.getFreedomESDKTargetInstalledFiles
-        | filter (\p (! matches `.*core\.dts` p.getPathName))
-        | head
-      match coreDTS
-        Some f = read f
-        None = Fail "No core.dts in FreedomESDKTarget".makeError
     match coreDTSContents
       # When PMP isn't supported, the riscv,pmpregions property is missing entirely.
       # If at some point in the future it is present but set to 0 to indicate missing
@@ -106,11 +106,18 @@ def filterFreedomESDKPrograms sdkTarget programs =
       Pass c = matches `.*riscv,pmpregions.*` c
       Fail _ = False
 
+  def targetHasAtomics =
+    match coreDTSContents
+      Pass c = matches `riscv,isa = "rv32.*a.*"` c
+      Fail _ = False
+
   programs
   | filter (\p (! matches `.*atomics.*` p.getFreedomESDKProgramName) || (! targetIs2Series))
+  | filter (\p (! matches `.*atomics.*` p.getFreedomESDKProgramName) || targetHasAtomics)
   | filter (\p (! matches `.*buserror.*` p.getFreedomESDKProgramName) || targetHasBusError)
   | filter (\p (! matches `.*clic.*` p.getFreedomESDKProgramName) || targetHasClic)
   | filter (\p (! matches `.*multicore-hello.*` p.getFreedomESDKProgramName) || (! targetIs2Series))
+  | filter (\p (! matches `.*multicore-hello.*` p.getFreedomESDKProgramName) || targetHasAtomics)
   | filter (\p (! matches `.*spi.*` p.getFreedomESDKProgramName) || targetHasSPI)
   | filter (\p (! matches `.*pmp.*` p.getFreedomESDKProgramName) || targetHasPMP)
   | filter (\p (! matches `.*pwm.*` p.getFreedomESDKProgramName) || targetHasPWM)
