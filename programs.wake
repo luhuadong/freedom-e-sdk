@@ -39,7 +39,6 @@ export def allFreedomESDKExamples sdkTarget =
     makeFreedomESDKProgram "i2c" "example",
     makeFreedomESDKProgram "itim" "example",
     makeFreedomESDKProgram "pmp" "example",
-    makeFreedomESDKProgram "pwm" "example",
     makeFreedomESDKProgram "rtc" "example",
     makeFreedomESDKProgram "spi" "example",
     makeFreedomESDKProgram "user-mode" "example",
@@ -64,6 +63,7 @@ export def allFreedomESDKFPGAExamples sdkTarget =
     makeFreedomESDKFPGAProgram "local-vector-interrupts" "example",
     makeFreedomESDKFPGAProgram "plic-interrupts" "example",
     makeFreedomESDKFPGAProgram "sifive-welcome" "example",
+    makeFreedomESDKFPGAProgram "pwm" "example",
     Nil
   filterFreedomESDKPrograms sdkTarget programList
 
